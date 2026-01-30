@@ -1,0 +1,22 @@
+{
+  "name": "shape-builder",
+  "version": "1.0.0",
+  "description": "shape builder with react",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "dev": "parcel src/index.html --port 3000",
+    "format": "prettier --write src/"
+  },
+  "author": "Anoop",
+  "license": "ISC",
+  "dependencies": {
+    "formik": "^2.4.9",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "parcel": "^2.16.3",
+    "prettier": "^3.8.0"
+  }
+}
