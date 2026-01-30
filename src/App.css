@@ -97,32 +97,48 @@
 .radio-button input {
   height: 20px;
   width: 20px;
+  cursor: pointer;
+  appearance: none;
+  border: 1px solid #3d3d3d;
+  border-radius: 50%;
+  background-color: white;
 }
-
+.radio-button input:checked {
+  background-color: rgb(8, 85, 126);
+}
 .time-to-wait {
   display: flex;
+  flex-direction: column;
   gap: 20;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: center;
 }
-
+.time-to-wait label {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: rgb(8, 85, 126);
+}
 .time-to-wait input {
   padding: 5px 5px;
   border-radius: 5px;
   max-width: 50px;
+  margin-left: 20px;
 }
-.time-to-wait button {
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 200px;
+}
+.button-group button {
   padding: 5px 10px;
   border-radius: 5px;
   background-color: rgb(8, 85, 126);
   color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  margin: 5px;
 }
-.time-to-wait button:active {
+.button-group button:active {
   transform: scale(0.9);
-}
-.time-to-wait label {
-  text-transform: uppercase;
-  font-weight: bold;
-  color: rgb(8, 85, 126);
 }

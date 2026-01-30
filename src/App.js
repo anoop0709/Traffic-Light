@@ -41,7 +41,8 @@ const App = () => {
   }, [activeLight, trafficLight]);
 
   const handleChange = (e, type) => {
-    formik.setFieldValue(type, e.target.value);
+    const { value } = e.target;
+    formik.setFieldValue(type, value);
   };
   const handleReset = () => {
     formik.resetForm();
@@ -71,7 +72,9 @@ const App = () => {
       setTimer((prev) => {
         if (prev <= 1) {
           setActiveLight(trafficLightRef.current[activeLightRef.current].next);
-          return trafficLightRef.current[trafficLightRef.current[activeLightRef.current].next].time;
+          return trafficLightRef.current[
+            trafficLightRef.current[activeLightRef.current].next
+          ].time;
         }
         return prev - 1;
       });
@@ -109,35 +112,36 @@ const App = () => {
           onSubmit={formik.handleSubmit}
           onReset={formik.handleReset}
         >
-            <p>
-              To change the intervals between lights, select any color below and
-              enter the time to wait
-            </p>
-            {Object.values(trafficLight).map((light) => (
-              <div key={`${light.id}-${light.color}`} className="radio-button">
-                <input
-                  type="radio"
-                  name="select-light"
-                  value={light.color}
-                  id={light.color}
-                  checked={formik.values.color === light.color}
-                  onChange={(e) => handleChange(e, 'color')}
-                />
-                <label
-                  htmlFor={light.color}
-                  style={{
-                    color: `${light.color}`,
-                    textTransform: 'capitalize',
-                    WebkitTextStroke: '0.3px black',
-                    fontSize: '22px',
-                  }}
-                >
-                  {light.color}
-                </label>
-              </div>
-            ))}
-            <div className="time-to-wait">
-              <label htmlFor="time">Time to wait: </label>
+          <p>
+            To change the intervals between lights, select any color below and
+            enter the time to wait
+          </p>
+          {Object.values(trafficLight).map((light) => (
+            <div key={`${light.id}-${light.color}`} className="radio-button">
+              <input
+                type="radio"
+                name="select-light"
+                value={light.color}
+                id={light.color}
+                checked={formik.values.color === light.color}
+                onChange={(e) => handleChange(e, 'color')}
+              />
+              <label
+                htmlFor={light.color}
+                style={{
+                  color: `${light.color}`,
+                  textTransform: 'capitalize',
+                  WebkitTextStroke: '0.3px black',
+                  fontSize: '22px',
+                }}
+              >
+                {light.color}
+              </label>
+            </div>
+          ))}
+          <div className="time-to-wait">
+            <label htmlFor="time">
+              Time to wait
               <input
                 id="time"
                 name="time"
@@ -146,17 +150,20 @@ const App = () => {
                 min={1}
                 onChange={(e) => handleChange(e, 'time')}
               />
-              <button type="submit">Enter</button>
+            </label>
+            <div className="button-group">
               <button type="reset" onClick={handleReset}>
-                reset
+                Reset
               </button>
+              <button type="submit">Enter</button>
             </div>
-            {isError && (
-              <p style={{ color: 'red' }}>
-                please select both color and time to update
-              </p>
-            )}
-          </form>
+          </div>
+          {isError && (
+            <p style={{ color: 'red' }}>
+              please select both color and time to update
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );
