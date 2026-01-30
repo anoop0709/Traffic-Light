@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
-import { Form, Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 
 const App = () => {
   const [activeLight, setActiveLight] = useState('red');
@@ -26,12 +26,19 @@ const App = () => {
     },
   });
   const [timer, setTimer] = useState(trafficLight[activeLight].time);
+  const activeLightRef = useRef(activeLight);
+  const trafficLightRef = useRef(trafficLight);
   const formik = useFormik({
     initialValues: { color: '', time: '' },
     onSubmit: (values) => {
       handleSubmit(values);
     },
   });
+
+  useEffect(() => {
+    activeLightRef.current = activeLight;
+    trafficLightRef.current = trafficLight;
+  }, [activeLight, trafficLight]);
 
   const handleChange = (e, type) => {
     formik.setFieldValue(type, e.target.value);
@@ -56,20 +63,21 @@ const App = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setActiveLight(trafficLight[activeLight].next);
-    }, trafficLight[activeLight].time * 1000);
     setTimer(trafficLight[activeLight].time);
-
-    return () => clearTimeout(timer);
-  }, [activeLight]);
+  }, [activeLight, trafficLight]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer(timer - 1);
+      setTimer((prev) => {
+        if (prev <= 1) {
+          setActiveLight(trafficLightRef.current[activeLightRef.current].next);
+          return trafficLightRef.current[trafficLightRef.current[activeLightRef.current].next].time;
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => clearInterval(interval);
-  }, [activeLight, timer]);
+  }, []);
 
   return (
     <div className="main-container">
@@ -96,12 +104,11 @@ const App = () => {
         ></p>
       </div>
       <div className="radio-button-container">
-        <Formik>
-          <Form
-            className="form-container"
-            onSubmit={formik.handleSubmit}
-            onReset={formik.handleReset}
-          >
+        <form
+          className="form-container"
+          onSubmit={formik.handleSubmit}
+          onReset={formik.handleReset}
+        >
             <p>
               To change the intervals between lights, select any color below and
               enter the time to wait
@@ -149,8 +156,7 @@ const App = () => {
                 please select both color and time to update
               </p>
             )}
-          </Form>
-        </Formik>
+          </form>
       </div>
     </div>
   );
